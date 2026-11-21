@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -71,9 +71,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceCard,
+                      color: const Color(0xFF14141B),
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.surfaceBorder),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                     ),
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
@@ -103,7 +103,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                 decoration: BoxDecoration(
-                  color: tierColor.withValues(alpha: 0.12),
+                  color: const Color(0xFF14141B),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: tierColor.withValues(alpha: 0.35)),
                 ),
@@ -150,13 +150,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: 14),
 
-              // Time Estimator & Session Peak Banner
+              // Time Estimator & Session Peak Banner (Clean dark glass)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceCard,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.surfaceBorder),
+                  color: const Color(0xFF14141B),
+                  borderRadius: BorderRadius.circular(22),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.35),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
@@ -222,7 +229,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: 16),
 
-              // 2x2 Glowing Pop Stat Grid
+              // 2x2 Glowing Pop Stat Grid (Now clean Apple dark glass, no muddy gradients!)
               Row(
                 children: [
                   Expanded(
@@ -276,20 +283,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: 18),
 
-              // Shared Live Scrolling Charts
+              // Realtime Power Curve Chart
               LiveWattageChart(
                 dataPoints: _batteryService.wattageHistory,
                 maxPoints: BatteryService.maxHistory,
                 label: 'Realtime Power Curve',
                 color: _data.isCharging ? AppColors.neonGreen : AppColors.cyberCyan,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
+
+              // Current Amperage Stream Chart (Now with dynamic scale - 487 mA fits perfectly inside!)
               LiveWattageChart(
                 dataPoints: _batteryService.currentHistory,
                 maxPoints: BatteryService.maxHistory,
                 label: 'Current Amperage Stream',
                 color: AppColors.electricPurple,
               ),
+
+              // Extra padding at bottom for seamless scrolling above navigation bar
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -315,7 +327,7 @@ class _NothingStatusPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: const Color(0xFF14141B),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.35)),
       ),

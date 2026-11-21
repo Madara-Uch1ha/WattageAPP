@@ -63,11 +63,18 @@ class _NothingDotMatrixGlyphBarState extends State<NothingDotMatrixGlyphBar>
         : AppColors.cyberCyan;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F0F15),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.surfaceBorder, width: 1.2),
+        color: const Color(0xFF14141B),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.35),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,13 +144,13 @@ class _NothingDotMatrixGlyphBarState extends State<NothingDotMatrixGlyphBar>
                     decoration: BoxDecoration(
                       color: isLit
                           ? activeColor.withValues(alpha: dotBrightness)
-                          : const Color(0xFF22222D),
+                          : const Color(0xFF22222E),
                       borderRadius: BorderRadius.circular(2.5),
                       boxShadow: isLit
                           ? [
                               BoxShadow(
-                                color: activeColor.withValues(alpha: dotBrightness * 0.7),
-                                blurRadius: 6,
+                                color: activeColor.withValues(alpha: dotBrightness * 0.6),
+                                blurRadius: 5,
                                 spreadRadius: 0.5,
                               ),
                             ]
