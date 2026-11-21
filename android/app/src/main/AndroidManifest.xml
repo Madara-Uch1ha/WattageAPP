@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.nothing.ketchum.permission.ENABLE" />
     <application
-        android:label="WattageApp"
+        android:label="Wattage"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="NothingKey" android:value="test" />

@@ -12,3 +12,7 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Repository designated release key for continuous update parity
+!key.properties
+!app/release.jks
