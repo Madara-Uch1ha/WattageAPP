@@ -32,14 +32,15 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.44.0'
           channel: 'stable'
           cache: true
 
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Verify Analysis (Non-fatal on deprecated SDK hints)
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+      - name: Verify Analysis
+        run: flutter analyze
 
       - name: Build Release APK
         run: flutter build apk --release
