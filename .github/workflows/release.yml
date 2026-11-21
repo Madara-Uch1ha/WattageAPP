@@ -42,8 +42,28 @@ jobs:
       - name: Verify Analysis
         run: flutter analyze
 
+      - name: Determine Auto-Incrementing Version
+        id: versioning
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            RAW_TAG="${GITHUB_REF#refs/tags/}"
+            CLEAN_VERSION="${RAW_TAG#v}"
+            TAG="$RAW_TAG"
+          else
+            CLEAN_VERSION="1.0.${{ github.run_number }}"
+            TAG="v${CLEAN_VERSION}"
+          fi
+          # Monotonically increasing Android versionCode (offset +10 to exceed initial test builds)
+          BUILD_NUMBER=$(( ${{ github.run_number }} + 10 ))
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${CLEAN_VERSION}" >> $GITHUB_OUTPUT
+          echo "build_number=${BUILD_NUMBER}" >> $GITHUB_OUTPUT
+
       - name: Build Release APK
-        run: flutter build apk --release
+        run: |
+          flutter build apk --release \
+            --build-name="${{ steps.versioning.outputs.version }}" \
+            --build-number="${{ steps.versioning.outputs.build_number }}"
 
       - name: Generate Checksums & Release Notes
         id: prep_release
@@ -61,22 +81,16 @@ jobs:
           
           cd -
           
-          # 1. Determine Auto-Incrementing Version Tag
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            TAG="${GITHUB_REF#refs/tags/}"
-          else
-            # Auto-increment using GitHub run number: v1.0.1, v1.0.2, etc.
-            TAG="v1.0.${{ github.run_number }}"
-          fi
+          TAG="${{ steps.versioning.outputs.tag }}"
           
-          # 2. Extract commit message & author
+          # Extract commit message & author
           COMMIT_TITLE=$(git log -1 --pretty=format:"%s")
           COMMIT_BODY=$(git log -1 --pretty=format:"%b")
           COMMIT_HASH=$(git log -1 --pretty=format:"%h")
           
-          # 3. Create formatted release notes
+          # Create formatted release notes
           cat <<EOF > release_notes.md
-          ## ⚡ WattageApp ${TAG} (Nothing Phone 4a Edition)
+          ## ⚡ Wattage ${TAG} (Build ${{ steps.versioning.outputs.build_number }})
           
           ### 📝 Commit Message & Changes:
           > **${COMMIT_TITLE}**
@@ -87,6 +101,7 @@ jobs:
           
           ### 📱 Device Profile:
           * **Target**: Nothing Phone (4a) [Nothing OS 4.1 / Android 16]
+          * **Version**: \`${TAG}\` (versionCode: \`${{ steps.versioning.outputs.build_number }}\`)
           * **Features**: Live Wattage ($P=V \times I$), 4a Dot-Matrix Glyph Bar, Adaptive Gauge, Hardware Battery & System Telemetry.
           * **Build Commit**: \`${COMMIT_HASH}\`
           
@@ -100,7 +115,7 @@ jobs:
           EOF
           
           echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
-          echo "release_name=WattageApp ${TAG}" >> $GITHUB_OUTPUT
+          echo "release_name=Wattage ${TAG}" >> $GITHUB_OUTPUT
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
